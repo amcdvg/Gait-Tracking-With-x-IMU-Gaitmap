@@ -114,7 +114,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 - **`Figure 5: Position`:** Visualiza la progresión de posición absoluta en métrica (m), detallando de forma matemática cuánto has avanzado, lado a lado.
 
 ### 🗺️ Paneles Topográficos (Comparaciones Directas Analíticas)
-- **`Figure 6: Position Comparison`:** Panel principal de superposición. Su gráfica superior ("X-Y Plane") otorga tu **Vista Cenital** (vista desde un dron) ilustrando las desviaciones laterales de tu rumbo. Su gráfica inferior ("Z Axis") compara exclusivamente las alturas, mostrando la elevación del pie vs salto de la pelvis.
+- **`Figure 6: Position Comparison`:** Panel principal de superposición. Su gráfica superior ("X-Y Plane") otorga tu **Vista Cenital** (vista desde un dron) ilustrando las desviaciones laterales de tu rumbo. Su gráfica inferior ("Z Axis") compara exclusivamente las alturas, mostrando la elevación del pie vs salto.
 - **`Figure 7: Y vs Z View`:** Muestra las trayectorias estrictamente enfocadas en el Plano **Frontal/Coronal**. Muy útil para detectar asimetrías mediales/laterales en cada brinco o paso.
 - **`Figure 8: X vs Z View`:** Revela la topografía en el Plano **Sagital** (visto de lado de perfil). Ideal para inspeccionar la longitud y elevación exacta de tus zancadas sin ruido lateral.
 
@@ -233,7 +233,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 > - **ZUPT bajo vibración extrema**: A diferencia de la marcha, las mesetas en $Z=0.000\text{ m}$ son significativamente más cortas. Esto refleja correctamente la reducción del tiempo de la fase de apoyo (*stance*) en la biomecánica de la carrera. El umbral elevado del algoritmo toleró el ruido del impacto sin perder el enganche al suelo.
 > - **Cinemática de fase de vuelo**: Las alturas máximas se elevan drásticamente (hasta $17.5\text{ cm}$) en comparación con la marcha, evidenciando la **"fase de vuelo"** característica de la carrera donde ambos pies (o el centro de masa) alcanzan un pico parabólico pronunciado.
 > - **Estabilidad del eje Z**: A pesar de la violencia del movimiento, la restricción `np.maximum` sigue funcionando perfectamente; el pie no "perfora" el suelo tras las caídas aceleradas de cada zancada.
-> - **Proporciones inter-sensores**: La hibridación logró un escalado coherente. Las alturas y el avance del sensor de la pelvis responden de manera proporcional a los impactos del pie, manteniendo la sincronía en el modelo 3D.
+> - **Proporciones inter-sensores**: La hibridación logró un escalado coherente. Las alturas y el avance del sensor del pie derecho responden de manera proporcional a los impactos del pie izquierdo, manteniendo la sincronía en el modelo 3D.
 
 ---
 
