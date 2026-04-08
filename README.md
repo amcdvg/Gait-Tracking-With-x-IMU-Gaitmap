@@ -9,6 +9,7 @@
     <img alt="SciPy" src="https://img.shields.io/badge/SciPy-8CAAE6?style=for-the-badge&logo=scipy">
     <img alt="Pandas" src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas">
     <img alt="Matplotlib" src="https://img.shields.io/badge/Matplotlib-ffffff?style=for-the-badge">
+    <img alt="Gaitmap" src="https://img.shields.io/badge/Gaitmap-FF6F00?style=for-the-badge">
     <img alt="Status" src="https://img.shields.io/badge/Estado-Activo-success?style=for-the-badge">
   </p>
 </div>
