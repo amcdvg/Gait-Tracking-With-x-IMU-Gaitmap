@@ -158,7 +158,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 </div>
 <br>
 
-> [!TIP]
+> [!IMPORTANT]
 > #### 🧠 3.1.3 Interpretación técnica
 > Comportamiento validado del pipeline en base a los datos tabulados:
 > - **ZUPT efectivo**: La velocidad del pie colapsa a $0$ estrictamente en cada fase de apoyo, lo que se refleja en las mesetas sostenidas de $0.000\text{ m}$ en el eje Z.
@@ -207,7 +207,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 </div>
 <br>
 
-> [!WARNING]
+> [!IMPORTANT]
 > #### 🧠 3.2.3 Interpretación técnica
 > Comportamiento validado del pipeline bajo condiciones de alto impacto:
 > - **ZUPT bajo vibración extrema**: A diferencia de la marcha, las mesetas en $Z=0.000\text{ m}$ son significativamente más cortas. Esto refleja correctamente la reducción del tiempo de la fase de apoyo (*stance*) en la biomecánica de la carrera. El umbral elevado del algoritmo toleró el ruido del impacto sin perder el enganche al suelo.
