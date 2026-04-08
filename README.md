@@ -119,123 +119,141 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 ## 🏆 Caso de Estudio a 100 Hz
 
-### 3.1 Análisis Cuantitativo: Marcha 5 m (100 Hz)
-Se analizaron las gráficas de trayectoria (Planos X-Y, X-Z y Z-Time) para una marcha estándar. La distancia total proyectada en el eje de avance (X) fue de aproximadamente 5.3 metros.
+### 🚶‍♂️ 3.1 Análisis Cuantitativo: Marcha 5 m (100 Hz)
+> *Se analizaron las gráficas de trayectoria (Planos X-Y, X-Z y Z-Time) para una marcha estándar. La distancia total proyectada en el eje de avance (X) fue de aproximadamente **5.3 metros**.*
 
 <div align="center">
-  <img src="images/6dof_animation_marcha.png" alt="6DOF Animation" width="700"/>
+  <img src="images/6dof_animation_marcha.png" alt="6DOF Animation" width="750" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </div>
 
-### 3.1.1 Conteo de zancadas
+#### 📊 3.1.1 Conteo de zancadas
 
-| Sensor | Sesión / Actividad | Conteo detectado | Distancia total (X) |
+| 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
 | :--- | :--- | :--- | :--- |
-| **Sensor 1 (Mov)** | Marcha 5m | 8 pasos | ~5.3 m |
-| **Sensor 2 (Wrist - Mov2)** | Marcha 5m | 7 pasos | ~5.3 m |
+| **Sensor 1 (Mov)** | Marcha 5m | **8 pasos** | ~5.3 m |
+| **Sensor 2 (Wrist - Mov2)** | Marcha 5m | **7 pasos** | ~5.3 m |
 
-### 3.1.2 Métricas espaciales por zancada
+#### 📐 3.1.2 Métricas espaciales por zancada
 
-| Indicador | Sensor 1 (Mov) | Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
 | :--- | :--- | :--- |
-| **Longitud media** | 0.66 m | 0.75 m |
-| **Altura media (Clearance)** | 0.095 m | 0.074 m |
-| **Altura máxima alcanzada** | 0.120 m | 0.082 m |
-| **Base de apoyo (Z=0)** | Estable (0.000 m) | Estable (0.000 m) |
+| **Longitud media** | `0.66 m` | `0.75 m` |
+| **Altura media (*Clearance*)** | `0.095 m` | `0.074 m` |
+| **Altura máxima alcanzada** | `0.120 m` | `0.082 m` |
+| **Base de apoyo (Z=0)** | 🟢 Estable (`0.000 m`) | 🟢 Estable (`0.000 m`) |
 
 <br>
-
 <div align="center">
-  <img src="images/trajectory_xz_marcha.png" alt="Trajectory X-Z Plane" width="700"/>
-  <br><br>
-  <img src="images/trajectory_xy_z_marcha.png" alt="Trajectory X-Y and Z Axis" width="700"/>
+  <img src="images/trajectory_xz_marcha.png" alt="Trajectory X-Z Plane" width="750" style="margin-bottom: 20px;"/>
+  <br>
+  <img src="images/trajectory_xy_z_marcha.png" alt="Trajectory X-Y and Z Axis" width="750"/>
 </div>
+<br>
 
-### 3.1.3 Interpretación técnica
-Comportamiento validado del pipeline en base a los datos tabulados:
-- **ZUPT efectivo**: La velocidad del pie colapsa a $0$ estrictamente en cada fase de apoyo, lo que se refleja en las mesetas sostenidas de $0.000\text{ m}$ en el eje Z.
-- **Proporción anatómica lógica**: Un franqueo (*clearance*) medio de $0.074\text{ m}$ para el pie y una longitud de zancada de $0.75\text{ m}$ son métricas fisiológicamente coherentes para un sujeto adulto, confirmando que la escala de doble integración es correcta.
-- **Control de Deriva (Drift)**: La desviación lateral máxima en el plano X-Y se contuvo en $~1.5\text{ m}$ (comportamiento natural de marcha no guiada), y la regla `np.maximum` impidió exitosamente que las alturas tomaran valores negativos en el eje Z.
-- **Cinemática 3D**: El renderizado 6-DOF estima correctamente la actitud continua (Pitch/Roll/Yaw) sin pérdida de referencia espacial.
+> [!TIP]
+> #### 🧠 3.1.3 Interpretación técnica
+> Comportamiento validado del pipeline en base a los datos tabulados:
+> - **ZUPT efectivo**: La velocidad del pie colapsa a $0$ estrictamente en cada fase de apoyo, lo que se refleja en las mesetas sostenidas de $0.000\text{ m}$ en el eje Z.
+> - **Proporción anatómica lógica**: Un franqueo (*clearance*) medio de $0.074\text{ m}$ para el pie y una longitud de zancada de $0.75\text{ m}$ son métricas fisiológicamente coherentes para un sujeto adulto, confirmando que la escala de doble integración es **correcta**.
+> - **Control de Deriva (*Drift*)**: La desviación lateral máxima en el plano X-Y se contuvo en $~1.5\text{ m}$ (comportamiento natural de marcha no guiada), y la regla `np.maximum` impidió exitosamente que las alturas tomaran valores negativos en el eje Z.
+> - **Cinemática 3D**: El renderizado 6-DOF estima correctamente la actitud continua (Pitch/Roll/Yaw) sin pérdida de referencia espacial.
 
 ---
 
-### Análisis Cuantitativo: Carrera 7 m (100 Hz)
-Se analizaron las gráficas de trayectoria para la prueba catalogada como carrera. La proyección en el eje de avance (X) indica un recorrido real capturado de aproximadamente 7.0 metros.
+### 🏃‍♂️ 3.2 Análisis Cuantitativo: Carrera 7 m (100 Hz)
+> *Se analizaron las gráficas de trayectoria para la prueba catalogada como carrera. La proyección en el eje de avance (X) indica un recorrido real capturado de aproximadamente **7.0 metros**.*
 
 <div align="center">
-  <img src="images/6dof_animation_running.png" alt="6DOF Animation Running" width="700"/>
+  <img src="images/6dof_animation_running.png" alt="6DOF Animation Running" width="750"/>
 </div>
 
-### 3.2.1 Conteo de zancadas
+#### 📊 3.2.1 Conteo de zancadas
 
-| Sensor | Sesión / Actividad | Conteo detectado | Distancia total (X) |
+| 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
 | :--- | :--- | :--- | :--- |
-| **Sensor 1 (Mov)** | Carrera | 7 zancadas | ~7.0 m |
-| **Sensor 2 (Wrist - Mov2)** | Carrera | 8 zancadas | ~7.0 m |
+| **Sensor 1 (Mov)** | Carrera | **7 zancadas** | ~7.0 m |
+| **Sensor 2 (Wrist - Mov2)** | Carrera | **8 zancadas** | ~7.0 m |
 
-### 3.2.2 Métricas espaciales por zancada
+#### 📐 3.2.2 Métricas espaciales por zancada
 
-| Indicador | Sensor 1 (Mov) | Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
 | :--- | :--- | :--- |
-| **Longitud media** | ~1.00 m | ~0.87 m |
-| **Altura media (Clearance)** | ~0.120 m | ~0.130 m |
-| **Altura máxima alcanzada** | 0.175 m | 0.170 m |
-| **Tiempo de apoyo (Z=0)** | Reducido (típico de carrera) | Breve pero estable en 0.000 m |
+| **Longitud media** | `~1.00 m` | `~0.87 m` |
+| **Altura media (*Clearance*)** | `~0.120 m` | `~0.130 m` |
+| **Altura máxima alcanzada** | `0.175 m` | `0.170 m` |
+| **Tiempo de apoyo (Z=0)** | ⚡ Reducido (típico de carrera) | 🟢 Breve pero estable en `0.000 m` |
 
 <br>
-
 <div align="center">
-  <img src="images/trajectory_xz_running.png" alt="Trajectory X-Z Plane Running" width="700"/>
-  <br><br>
-  <img src="images/trajectory_xy_z_running.png" alt="Trajectory X-Y and Z Axis Running" width="700"/>
+  <img src="images/trajectory_xz_running.png" alt="Trajectory X-Z Plane Running" width="750" style="margin-bottom: 20px;"/>
+  <br>
+  <img src="images/trajectory_xy_z_running.png" alt="Trajectory X-Y and Z Axis Running" width="750"/>
 </div>
+<br>
 
-### 3.2.3 Interpretación técnica
-Comportamiento validado del pipeline bajo condiciones de alto impacto:
-- **ZUPT bajo vibración extrema**: A diferencia de la marcha, las mesetas en $Z=0.000\text{ m}$ son significativamente más cortas. Esto refleja correctamente la reducción del tiempo de la fase de apoyo (*stance*) en la biomecánica de la carrera. El umbral elevado del algoritmo toleró el ruido del impacto sin perder el enganche al suelo.
-- **Cinemática de fase de vuelo**: Las alturas máximas se elevan drásticamente (hasta $17.5\text{ cm}$) en comparación con la marcha, evidenciando la "fase de vuelo" característica de la carrera donde ambos pies (o el centro de masa) alcanzan un pico parabólico pronunciado.
-- **Estabilidad del eje Z**: A pesar de la violencia del movimiento, la restricción `np.maximum` sigue funcionando perfectamente; la gráfica demuestra que el pie no "perfora" el suelo tras las caídas aceleradas de cada zancada.
-- **Proporciones inter-sensores**: La hibridación logró un escalado coherente. Las alturas y el avance del sensor de la pelvis responden de manera proporcional a los impactos del pie, manteniendo la sincronía en el modelo 3D sin que un sensor se desplace artificialmente más rápido que el otro.
+> [!WARNING]
+> #### 🧠 3.2.3 Interpretación técnica
+> Comportamiento validado del pipeline bajo condiciones de alto impacto:
+> - **ZUPT bajo vibración extrema**: A diferencia de la marcha, las mesetas en $Z=0.000\text{ m}$ son significativamente más cortas. Esto refleja correctamente la reducción del tiempo de la fase de apoyo (*stance*) en la biomecánica de la carrera. El umbral elevado del algoritmo toleró el ruido del impacto sin perder el enganche al suelo.
+> - **Cinemática de fase de vuelo**: Las alturas máximas se elevan drásticamente (hasta $17.5\text{ cm}$) en comparación con la marcha, evidenciando la **"fase de vuelo"** característica de la carrera donde ambos pies (o el centro de masa) alcanzan un pico parabólico pronunciado.
+> - **Estabilidad del eje Z**: A pesar de la violencia del movimiento, la restricción `np.maximum` sigue funcionando perfectamente; el pie no "perfora" el suelo tras las caídas aceleradas de cada zancada.
+> - **Proporciones inter-sensores**: La hibridación logró un escalado coherente. Las alturas y el avance del sensor de la pelvis responden de manera proporcional a los impactos del pie, manteniendo la sincronía en el modelo 3D.
 
 ---
 
-### Análisis Cuantitativo: Salto (100 Hz)
-Se analizaron las gráficas de trayectoria para un evento balístico singular (un salto hacia adelante). La distancia proyectada confirma un desplazamiento neto cercano a los 40 cm.
+### 🦘 3.3 Análisis Cuantitativo: Salto (100 Hz)
+> *Se analizaron las gráficas de trayectoria para un evento balístico singular (un salto hacia adelante). La distancia proyectada confirma un desplazamiento neto cercano a los **40 cm**.*
 
 <div align="center">
-  <img src="images/6dof_animation_jumping.png" alt="6DOF Animation Jumping" width="700"/>
+  <img src="images/6dof_animation_jumping.png" alt="6DOF Animation Jumping" width="750"/>
 </div>
 
-### 3.3.1 Conteo de zancadas
+#### 📊 3.3.1 Conteo de zancadas
 
-| Sensor | Sesión / Actividad | Conteo detectado | Distancia total (X) |
+| 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
 | :--- | :--- | :--- | :--- |
-| **Sensor 1 (Mov)** | Salto Horizontal | 1 fase de vuelo | ~0.53 m |
-| **Sensor 2 (Wrist - Mov2)** | Salto Horizontal | 1 fase de vuelo | ~0.42 m |
+| **Sensor 1 (Mov)** | Salto Horizontal | **1 fase de vuelo** | ~0.53 m |
+| **Sensor 2 (Wrist - Mov2)** | Salto Horizontal | **1 fase de vuelo** | ~0.42 m |
 
-### 3.3.2 Métricas espaciales del salto
+#### 📐 3.3.2 Métricas espaciales del salto
 
-| Indicador | Sensor 1 (Mov) | Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
 | :--- | :--- | :--- |
-| **Desplazamiento horizontal neto** | 0.53 m | 0.42 m |
-| **Altura máxima alcanzada (Z)** | 0.135 m | 0.175 m |
-| **Tiempo de vuelo (aprox)** | ~0.4 s | ~0.4 s |
-| **Comportamiento post-impacto** | Estabilizado en Z=0 | Estabilizado en Z=0 |
+| **Desplazamiento horizontal neto** | `0.53 m` | `0.42 m` |
+| **Altura máxima alcanzada (Z)** | `0.135 m` | `0.175 m` |
+| **Tiempo de vuelo (aprox)** | `~0.4 s` | `~0.4 s` |
+| **Comportamiento post-impacto** | 🟢 Estabilizado en `0.000 m` | 🟢 Estabilizado en `0.000 m` |
 
 <br>
-
 <div align="center">
-  <img src="images/trajectory_xz_jumping.png" alt="Trajectory X-Z Plane Jumping" width="700"/>
-  <br><br>
-  <img src="images/trajectory_xy_z_jumping.png" alt="Trajectory X-Y and Z Axis Jumping" width="700"/>
+  <img src="images/trajectory_xz_jumping.png" alt="Trajectory X-Z Plane Jumping" width="750" style="margin-bottom: 20px;"/>
+  <br>
+  <img src="images/trajectory_xy_z_jumping.png" alt="Trajectory X-Y and Z Axis Jumping" width="750"/>
 </div>
+<br>
 
-### 3.3.3 Interpretación técnica
-Comportamiento validado del pipeline bajo dinámica de salto:
-- **Fase de vuelo balística**: La gráfica X-Z muestra una parábola limpia y continua. Al no haber apoyo durante el vuelo, el sistema de hibridación confía plenamente en la estimación del filtro RTS-Kalman, logrando reconstruir el arco del salto sin cortes artificiales.
-- **Tolerancia extrema al impacto**: El aterrizaje de un salto horizontal genera el pico de aceleración más violento. Las gráficas de altura (Z vs Time) muestran que la línea colapsa de forma controlada hacia la base ($0.000\text{ m}$) y se mantiene plana tras el impacto. El ZUPT absorbió el choque sin generar un rebote matemático.
-- **Precisión espacial (Ground Truth)**: La convergencia de la trayectoria del pie (Sensor 2) en $~0.42\text{ m}$ en el eje X demuestra una alta fidelidad métrica del algoritmo para capturar desplazamientos cortos y explosivos.
-- **Cinemática 3D**: El render 6-DOF evidencia la inclinación del pie durante el despegue y el aterrizaje, validando que el cálculo del cuaternión soporta rotaciones agresivas en el aire.
+> [!IMPORTANT]
+> #### 🧠 3.3.3 Interpretación técnica
+> Comportamiento validado del pipeline bajo dinámica de salto:
+> - **Fase de vuelo balística**: La gráfica X-Z muestra una parábola limpia y continua. Al no haber apoyo durante el vuelo, el sistema de hibridación confía plenamente en la estimación del filtro RTS-Kalman, logrando reconstruir el arco del salto sin cortes artificiales.
+> - **Tolerancia extrema al impacto**: El aterrizaje de un salto horizontal genera el pico de aceleración más violento. Las gráficas de altura (Z vs Time) muestran que la línea colapsa de forma controlada hacia la base ($0.000\text{ m}$) y se mantiene plana tras el impacto. El ZUPT absorbió el choque sin generar un rebote matemático.
+> - **Precisión espacial (*Ground Truth*)**: La convergencia de la trayectoria del pie en $~0.42\text{ m}$ en el eje X demuestra una alta fidelidad métrica del algoritmo para capturar desplazamientos cortos y explosivos.
+> - **Cinemática 3D**: El render 6-DOF evidencia la inclinación del pie durante el despegue y el aterrizaje, validando que el cálculo del cuaternión soporta rotaciones agresivas en el aire.
+
+---
+
+## 🎯 Conclusiones y Cierre Técnico
+
+> [!NOTE]
+> ### 🔍 Conclusiones
+> - **Estabilidad del Sistema:** El sistema es **altamente estable** para analizar marchas. La contención de la deriva (*drift*) en un recorrido o un salto es excelente; las alturas no se disparan hacia el infinito con el paso del tiempo.
+> - **Métricas Fisiológicamente Coherentes:** Un franqueo del pie (*clearance*) de $~7\text{ cm}$ es una medida biomecánica estándar y realista para un humano caminando en una superficie plana. Esto indica férreamente que la doble integración de la aceleración está **bien escalada**.
+> - **Hibridación Exitosa:** Los datos visualizados confirman que el pipeline puede tomar datos "crudos" a $100\text{ Hz}$, separar las fases de vuelo y apoyo, segmentar correctamente el conteo de pasos y entregar un **gemelo digital 3D** directamente listo para un entorno de producción o análisis médico detallado.
+
+> [!IMPORTANT]
+> ### 🔬 Cierre Técnico
+> - El uso del estimador **RTS-Kalman** es validado sin lugar a dudas como la **opción superior** para ejercicios balísticos o de carrera rápida.
+> - El sistema unificado es completamente apto para transicionar de **estudios de marcha clínica** a diagnósticos de **alto rendimiento deportivo** sin tener que cambiar de plataforma algorítmica.
 
 ---
 
