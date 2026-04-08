@@ -18,6 +18,8 @@
 
 ## ✨ Descripción General
 
+<div align="justify">
+
 El script principal **`ScriptTwoSensors.py`** es una herramienta desarrollada en Python para el procesamiento avanzado de datos inerciales provenientes de dos sensores **x-IMU** simultáneos. Está diseñado específicamente para analizar y reconstruir el movimiento del cuerpo en diferentes actividades deportivas y cotidianas.
 
 **¿Qué es la Arquitectura de Hibridación?**
@@ -26,6 +28,8 @@ La innovación clave de este programa radica en su capacidad de comportarse como
 2. **Método Probabilístico (Gaitmap):** Cuando saltas o corres a gran velocidad, el script cambia automáticamente su motor de cálculo a la librería *Gaitmap*, empleando potentes Filtros de Kalman (Estimadores de Estado RTS) y *RamppEventDetection* (modelos probabilísticos y estadísticos) para no perder el rastro de tus apoyos (ZUPT), incluso entre la vibración y el ruido violento del impacto en el asfalto.
 
 ¡Esta hibridación asegura que el pie nunca se hunda debajo del suelo y la pelvis coincida en la escala de desplazamiento sin importar si caminas, corres o saltas!
+
+</div>
 
 ---
 
@@ -78,6 +82,8 @@ La configuración es rápida e intuitiva, controlada directamente en la cabecera
 
 ## 📉 Flujo de Operación
 
+<div align="justify">
+
 ### 1️⃣ Importación y Detección
 El script extrae inteligentemente la de la primera línea de tu archivo `.txt` la tasa de muestreo (Ej: `50Hz`, `100Hz` o frecuencias configuradas personalizadas). Une automágicamente IDs de sensores idénticos si fuesen necesarios.
 
@@ -87,9 +93,13 @@ Para la parte manual, usa un **Filtro Butterworth Pasa-Bajos/Altos** aislando ve
 ### 3️⃣ Fusión y Proyección Z
 Integración del cuaternión $q \rightarrow$ Rotación al modelo global $\rightarrow$ Cálculo aceleración sin la base de Gravedad (1g) $\rightarrow$ Integración para Velocidad y Posición, corrigiendo finalmente derivas del mundo real.
 
+</div>
+
 ---
 
 ## 🗺️ Resultados y Análisis Gráfico
+
+<div align="justify">
 
 Para asegurar un estudio biomecánico completo, el procesamiento despliega una batería de ventanas gráficas separadas para cada etapa matemática. A continuación se detalla **cuidadosamente qué representa cada ventana** que aparecerá en tu pantalla:
 
@@ -115,12 +125,18 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 - **〰️ Rastros Brillantes (Trails):** Mientras los sensores ("cuadrados flotantes") se mueven, van derramando una tinta mágica en el aire trazando la ruta continua y exacta del pie y tu cadera volumétricamente.
 - **🧭 Apuntado Cuaterniónico Completo (Vectores R-G-B):** Ambos sensores manifiestan dinámicamente sólidas flechas que apuntan hacia sus planos cardinales correspondientes. Cambian maravillosamente según transites para revelar matemáticamente, dentro del render 3D, tu inclinación o ladeo verdadero (Pitch, Roll, Yaw).
 
+</div>
+
 ---
 
 ## 🏆 Caso de Estudio a 100 Hz
 
 ### 🚶‍♂️ 3.1 Análisis Cuantitativo: Marcha 5 m (100 Hz)
+<div align="justify">
+
 > *Se analizaron las gráficas de trayectoria (Planos X-Y, X-Z y Z-Time) para una marcha estándar. La distancia total proyectada en el eje de avance (X) fue de aproximadamente **5.3 metros**.*
+
+</div>
 
 <div align="center">
   <img src="images/6dof_animation_marcha.png" alt="6DOF Animation" width="750" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
@@ -169,7 +185,11 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 ---
 
 ### 🏃‍♂️ 3.2 Análisis Cuantitativo: Carrera 7 m (100 Hz)
+<div align="justify">
+
 > *Se analizaron las gráficas de trayectoria para la prueba catalogada como carrera. La proyección en el eje de avance (X) indica un recorrido real capturado de aproximadamente **7.0 metros**.*
+
+</div>
 
 <div align="center">
   <img src="images/6dof_animation_running.png" alt="6DOF Animation Running" width="750"/>
@@ -218,7 +238,11 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 ---
 
 ### 🦘 3.3 Análisis Cuantitativo: Salto (100 Hz)
+<div align="justify">
+
 > *Se analizaron las gráficas de trayectoria para un evento balístico singular (un salto hacia adelante). La distancia proyectada confirma un desplazamiento neto cercano a los **40 cm**.*
+
+</div>
 
 <div align="center">
   <img src="images/6dof_animation_jumping.png" alt="6DOF Animation Jumping" width="750"/>
