@@ -30,7 +30,7 @@ La innovación clave de este programa radica en su capacidad de comportarse como
 
 ## 🚀 Características Principales
 
-- 📡 **Doble Sensor Simultáneo:** Procesamiento sincronizado (típicamente ubicados en la Pelvis y en un Pie).
+- 📡 **Doble Sensor Simultáneo:** Procesamiento sincronizado (típicamente ubicados en el pie derecho y en el pie izquierdo).
 - 🧠 **Clasificador Automático de Actividad:** Detecta dinámicamente si el sujeto está realizando *Marcha*, *Correr* o realizando un *Salto* a través del análisis estadístico de la varianza y el pico de aceleración, aplicando reglas matemáticas diferentes para cada caso.
 - ⚙️ **Hibridación Avanzada (Gaitmap Integrado):** Utiliza filtros RTS-Kalman y algoritmos de detección de apoyo *Zero Velocity Update (ZUPT)*, mitigando la deriva (*drift*) logarítmica/exponencial típica en la integración de acelerómetros a través de las funciones nativas y `RamppEventDetection`.
 - 📐 **Alineación Geométrica y Retoque Z:** Rutinas PCA (Análisis de Componentes Principales) que detectan el vector de avance y un forzamiento de umbrales para asegurar matemáticamente que la altura `Z` nunca pase a ser negativa (se hunda en el suelo). Adicionalmente, empareja las escalas de tamaño al vuelo.
