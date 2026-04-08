@@ -128,19 +128,27 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 #### 📊 3.1.1 Conteo de zancadas
 
+<div align="center">
+
 | 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
-| :--- | :--- | :--- | :--- |
+| :---: | :---: | :---: | :---: |
 | **Sensor 1 (Mov)** | Marcha 5m | **8 pasos** | ~5.3 m |
 | **Sensor 2 (Wrist - Mov2)** | Marcha 5m | **7 pasos** | ~5.3 m |
 
+</div>
+
 #### 📐 3.1.2 Métricas espaciales por zancada
 
+<div align="center">
+
 | 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
-| :--- | :--- | :--- |
+| :---: | :---: | :---: |
 | **Longitud media** | `0.66 m` | `0.75 m` |
 | **Altura media (*Clearance*)** | `0.095 m` | `0.074 m` |
 | **Altura máxima alcanzada** | `0.120 m` | `0.082 m` |
 | **Base de apoyo (Z=0)** | 🟢 Estable (`0.000 m`) | 🟢 Estable (`0.000 m`) |
+
+</div>
 
 <br>
 <div align="center">
@@ -169,19 +177,27 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 #### 📊 3.2.1 Conteo de zancadas
 
+<div align="center">
+
 | 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
-| :--- | :--- | :--- | :--- |
+| :---: | :---: | :---: | :---: |
 | **Sensor 1 (Mov)** | Carrera | **7 zancadas** | ~7.0 m |
 | **Sensor 2 (Wrist - Mov2)** | Carrera | **8 zancadas** | ~7.0 m |
 
+</div>
+
 #### 📐 3.2.2 Métricas espaciales por zancada
 
+<div align="center">
+
 | 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
-| :--- | :--- | :--- |
+| :---: | :---: | :---: |
 | **Longitud media** | `~1.00 m` | `~0.87 m` |
 | **Altura media (*Clearance*)** | `~0.120 m` | `~0.130 m` |
 | **Altura máxima alcanzada** | `0.175 m` | `0.170 m` |
 | **Tiempo de apoyo (Z=0)** | ⚡ Reducido (típico de carrera) | 🟢 Breve pero estable en `0.000 m` |
+
+</div>
 
 <br>
 <div align="center">
@@ -210,19 +226,27 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 #### 📊 3.3.1 Conteo de zancadas
 
+<div align="center">
+
 | 📡 Sensor | ⏱️ Sesión / Actividad | 👣 Conteo detectado | 📏 Distancia total (X) |
-| :--- | :--- | :--- | :--- |
+| :---: | :---: | :---: | :---: |
 | **Sensor 1 (Mov)** | Salto Horizontal | **1 fase de vuelo** | ~0.53 m |
 | **Sensor 2 (Wrist - Mov2)** | Salto Horizontal | **1 fase de vuelo** | ~0.42 m |
 
+</div>
+
 #### 📐 3.3.2 Métricas espaciales del salto
 
+<div align="center">
+
 | 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
-| :--- | :--- | :--- |
+| :---: | :---: | :---: |
 | **Desplazamiento horizontal neto** | `0.53 m` | `0.42 m` |
 | **Altura máxima alcanzada (Z)** | `0.135 m` | `0.175 m` |
 | **Tiempo de vuelo (aprox)** | `~0.4 s` | `~0.4 s` |
 | **Comportamiento post-impacto** | 🟢 Estabilizado en `0.000 m` | 🟢 Estabilizado en `0.000 m` |
+
+</div>
 
 <br>
 <div align="center">
