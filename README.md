@@ -157,7 +157,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 <div align="center">
 
-| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | 👟⌚ Sensor 2 (Mov2 o Wrist) |
 | :---: | :---: | :---: |
 | **Longitud media** | `0.66 m` | `0.75 m` |
 | **Altura media (*Clearance*)** | `0.095 m` | `0.074 m` |
@@ -210,7 +210,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 <div align="center">
 
-| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | 👟⌚ Sensor 2 (Mov2 o Wrist) |
 | :---: | :---: | :---: |
 | **Longitud media** | `~1.00 m` | `~0.87 m` |
 | **Altura media (*Clearance*)** | `~0.120 m` | `~0.130 m` |
@@ -263,7 +263,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 <div align="center">
 
-| 🎯 Indicador | 👟 Sensor 1 (Mov) | ⌚ Sensor 2 (Mov2 o Wrist) |
+| 🎯 Indicador | 👟 Sensor 1 (Mov) | 👟⌚ Sensor 2 (Mov2 o Wrist) |
 | :---: | :---: | :---: |
 | **Desplazamiento horizontal neto** | `0.53 m` | `0.42 m` |
 | **Altura máxima alcanzada (Z)** | `0.135 m` | `0.175 m` |
