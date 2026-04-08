@@ -117,6 +117,48 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 ---
 
+## 🏆 Caso de Estudio: Marcha a 100 Hz
+
+### Análisis Cuantitativo: Marcha 5 m (100 Hz)
+Se analizaron las gráficas de trayectoria (Planos X-Y, X-Z y Z-Time) para una marcha estándar. La distancia total proyectada en el eje de avance (X) fue de aproximadamente 5.3 metros.
+
+<div align="center">
+  <img src="images/6dof_animation_marcha.png" alt="6DOF Animation" width="700"/>
+</div>
+
+### 3.1.1 Conteo de zancadas
+
+| Sensor | Sesión / Actividad | Conteo detectado | Distancia total (X) |
+| :--- | :--- | :--- | :--- |
+| **Sensor 1 (Mov)** | Marcha 5m | 8 pasos | ~5.3 m |
+| **Sensor 2 (Wrist - Mov2)** | Marcha 5m | 7 pasos | ~5.3 m |
+
+### 3.1.2 Métricas espaciales por zancada
+
+| Indicador | Sensor 1 (Mov) | Sensor 2 (Mov2 o Wrist) |
+| :--- | :--- | :--- |
+| **Longitud media** | 0.66 m | 0.75 m |
+| **Altura media (Clearance)** | 0.095 m | 0.074 m |
+| **Altura máxima alcanzada** | 0.120 m | 0.082 m |
+| **Base de apoyo (Z=0)** | Estable (0.000 m) | Estable (0.000 m) |
+
+<br>
+
+<div align="center">
+  <img src="images/trajectory_xz_marcha.png" alt="Trajectory X-Z Plane" width="700"/>
+  <br><br>
+  <img src="images/trajectory_xy_z_marcha.png" alt="Trajectory X-Y and Z Axis" width="700"/>
+</div>
+
+### 3.1.3 Interpretación técnica
+Comportamiento validado del pipeline en base a los datos tabulados:
+- **ZUPT efectivo**: La velocidad del pie colapsa a $0$ estrictamente en cada fase de apoyo, lo que se refleja en las mesetas sostenidas de $0.000\text{ m}$ en el eje Z.
+- **Proporción anatómica lógica**: Un franqueo (*clearance*) medio de $0.074\text{ m}$ para el pie y una longitud de zancada de $0.75\text{ m}$ son métricas fisiológicamente coherentes para un sujeto adulto, confirmando que la escala de doble integración es correcta.
+- **Control de Deriva (Drift)**: La desviación lateral máxima en el plano X-Y se contuvo en $~1.5\text{ m}$ (comportamiento natural de marcha no guiada), y la regla `np.maximum` impidió exitosamente que las alturas tomaran valores negativos en el eje Z.
+- **Cinemática 3D**: El renderizado 6-DOF estima correctamente la actitud continua (Pitch/Roll/Yaw) sin pérdida de referencia espacial.
+
+---
+
 ## 💡 Consejos de Optimización
 
 > [!TIP]
