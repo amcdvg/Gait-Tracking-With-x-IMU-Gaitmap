@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://img.icons8.com/color/150/000000/python.png" width="80" alt="Python logo"/>
-  <h1>🏃‍♂️ Gait Tracking With x-IMU (Two Sensors)</h1>
+  <h1>🏃‍♂️ Hibridación de Gait Tracking With x-IMU y Gaitmap (Two Sensors)</h1>
   <p><strong>Análisis y Reconstrucción de Trayectorias 3D con IMUs Duales</strong></p>
 
   <p>
