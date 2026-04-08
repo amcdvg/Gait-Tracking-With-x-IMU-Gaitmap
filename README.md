@@ -117,7 +117,7 @@ Estas figuras traen paneles duales superpuestos (Arriba Sensor 1 / Abajo Sensor 
 
 ---
 
-## 🏆 Caso de Estudioa 100 Hz
+## 🏆 Caso de Estudio a 100 Hz
 
 ### 3.1 Análisis Cuantitativo: Marcha 5 m (100 Hz)
 Se analizaron las gráficas de trayectoria (Planos X-Y, X-Z y Z-Time) para una marcha estándar. La distancia total proyectada en el eje de avance (X) fue de aproximadamente 5.3 metros.
