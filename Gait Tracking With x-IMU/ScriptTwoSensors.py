@@ -17,7 +17,7 @@ from SixDofAnimationTwoSensors import SixDofAnimation
 # -------------------------------------------------------------------------
 # Select dataset (comment in/out)
 
-filePath = 'datasets/caminata 10 m Aza_20260204_120349_tem2.txt'
+filePath = '/Users/amc/Documents/Gait-Tracking-With-x-IMU-Gaitmap/datasets/new/Salto_Horizontal_serie_01_150cm_20260428_115154_tem2.txt'
 startTime = 0
 stopTime = 10000
 
@@ -48,8 +48,13 @@ if filePath.endswith('.txt'):
     df1_id2 = df[(df['canal'] == canales[0]) & (df['id'] == 2)].reset_index(drop=True)
     
     # Filter for canal == 'Wrist' (Sensor 2 - Pie Izquierdo)
-    df2_id1 = df[(df['canal'] == canales[-1]) & (df['id'] == 1)].reset_index(drop=True)
-    df2_id2 = df[(df['canal'] == canales[-1]) & (df['id'] == 2)].reset_index(drop=True)
+    print(freq_str)
+    if freq_str == '50':
+        df2_id1 = df[(df['canal'] == canales[1]) & (df['id'] == 1)].reset_index(drop=True)
+        df2_id2 = df[(df['canal'] == canales[1]) & (df['id'] == 2)].reset_index(drop=True)
+    else:
+        df2_id1 = df[(df['canal'] == canales[-1]) & (df['id'] == 1)].reset_index(drop=True)
+        df2_id2 = df[(df['canal'] == canales[-1]) & (df['id'] == 2)].reset_index(drop=True)
     
     # Comprobar si existen datos con id=2 (para los archivos de 50 Hz)
     has_id2 = len(df1_id2) > 0 and len(df2_id2) > 0
@@ -116,14 +121,22 @@ filtCutOff = 0.001
 b, a = butter(1, (2.0*filtCutOff)/(1.0/samplePeriod), btype='high')
 acc_magFilt1 = np.abs(filtfilt(b, a, acc_mag1))
 acc_magFilt2 = np.abs(filtfilt(b, a, acc_mag2))
+if freq_str == '50':
+    filtCutOff = 5
+    b, a = butter(1, (2.0*filtCutOff)/(1.0/samplePeriod), btype='low')
+    acc_magFilt1 = filtfilt(b, a, acc_magFilt1)
+    acc_magFilt2 = filtfilt(b, a, acc_magFilt2)
 
-filtCutOff = 15
-b, a = butter(1, (2.0*filtCutOff)/(1.0/samplePeriod), btype='low')
-acc_magFilt1 = filtfilt(b, a, acc_magFilt1)
-acc_magFilt2 = filtfilt(b, a, acc_magFilt2)
+    stationary1 = (acc_magFilt1 < 0.05) & (acc_mag1 > 0.7) & (acc_mag1 < 1.3)
+    stationary2 = (acc_magFilt2 < 0.05) & (acc_mag2 > 0.7) & (acc_mag2 < 1.3)
+else:
+    filtCutOff = 15
+    b, a = butter(1, (2.0*filtCutOff)/(1.0/samplePeriod), btype='low')
+    acc_magFilt1 = filtfilt(b, a, acc_magFilt1)
+    acc_magFilt2 = filtfilt(b, a, acc_magFilt2)
 
-stationary1 = (acc_magFilt1 < 0.2) & (acc_mag1 > 0.6) & (acc_mag1 < 1.4)
-stationary2 = (acc_magFilt2 < 0.2) & (acc_mag2 > 0.6) & (acc_mag2 < 1.4)
+    stationary1 = (acc_magFilt1 < 0.2) & (acc_mag1 > 0.6) & (acc_mag1 < 1.4)
+    stationary2 = (acc_magFilt2 < 0.2) & (acc_mag2 > 0.6) & (acc_mag2 < 1.4)
 
 # -------------------------------------------------------------------------
 # Plot raw sensor data and stationary periods
@@ -184,10 +197,12 @@ acc_peak = np.percentile(acc_mag1, 99)
 energia_senal = np.var(acc_mag1)
 print(acc_peak)
 print(energia_senal)
-if acc_peak > 4.65 or energia_senal > 2.0:
+if acc_peak > 3.5 or (energia_senal > 1.5 and acc_peak > 3.0):
     actividad_actual = 'salto'
-elif acc_peak > 2.7 or energia_senal > 0.6:
-    actividad_actual = 'correr'
+elif acc_peak > 2.7 or energia_senal > 0.8:
+    if freq_str == '50':
+        actividad_actual = 'marcha'
+    else: actividad_actual = 'correr'
 else:
     actividad_actual = 'marcha'
 
@@ -423,13 +438,15 @@ if actividad_actual in ['correr']:
     pos2[:, 2] = np.maximum(pos2[:, 2], 0.0)
 
     # =========================================================================
+    # =========================================================================
     # --- IGUALAR ALTURAS DE ZANCADA ENTRE SENSORES ---
     # Escala la trayectoria Z de Sensor 1 para que su altura máxima (98%) 
     # coincida con la de Sensor 2, haciendo que sean relativamente iguales.
+    # Se omite si el sensor 2 es Wrist, ya que achataria la curva real del pie.
     # =========================================================================
     p_z1 = np.percentile(pos1[:, 2], 98)
     p_z2 = np.percentile(pos2[:, 2], 98)
-    if p_z1 > 0.001 and p_z2 > 0.001:
+    if p_z1 > 0.001 and p_z2 > 0.001 and 'Wrist' not in canales[1]:
         pos1[:, 2] = pos1[:, 2] * (p_z2 / p_z1)
 
 elif actividad_actual in ['salto']:
@@ -438,8 +455,8 @@ elif actividad_actual in ['salto']:
     from gaitmap.event_detection import RamppEventDetection
     from gaitmap.trajectory_reconstruction import RtsKalman
     from gaitmap.preprocessing.sensor_alignment import PcaAlignment
-
-    N_BIAS_SAMPLES = 20
+    from gaitmap.stride_segmentation import BarthDtw, RoiStrideSegmentation
+    import warnings
 
     def load_imu_data(filepath, sensor_name):
         with open(filepath, 'r') as f:
@@ -457,80 +474,62 @@ elif actividad_actual in ['salto']:
 
             if df_id2.empty:
                 df_sensor = df_id1.copy()
-                for eje in ['rawGirX', 'rawGirY', 'rawGirZ']:
-                    bias = df_sensor[eje].astype(float).iloc[:N_BIAS_SAMPLES].mean()
-                    df_sensor[eje] = df_sensor[eje].astype(float) - bias
-                return pd.DataFrame({
-                    'acc_pa': df_sensor['rawAccX'].astype(float),
-                    'acc_ml': df_sensor['rawAccY'].astype(float),
-                    'acc_si': df_sensor['rawAccZ'].astype(float),
-                    'gyr_pa': df_sensor['rawGirX'].astype(float),
-                    'gyr_ml': df_sensor['rawGirY'].astype(float),
-                    'gyr_si': df_sensor['rawGirZ'].astype(float)
-                }).reset_index(drop=True)
-
-            for eje in ['rawGirX', 'rawGirY', 'rawGirZ']:
-                bias = df_id1[eje].astype(float).iloc[:N_BIAS_SAMPLES].mean()
-                df_id1[eje] = df_id1[eje].astype(float) - bias
-
-            s1 = df_id1.set_index('sample')
-            s2 = df_id2.set_index('sample')
-            common = sorted(s1.index.intersection(s2.index))
-
-            if len(common) == 0:
-                df_sensor = df_id1.copy()
-                return pd.DataFrame({
-                    'acc_pa': df_sensor['rawAccX'].astype(float).values,
-                    'acc_ml': df_sensor['rawAccY'].astype(float).values,
-                    'acc_si': df_sensor['rawAccZ'].astype(float).values,
-                    'gyr_pa': df_sensor['rawGirX'].astype(float).values,
-                    'gyr_ml': df_sensor['rawGirY'].astype(float).values,
-                    'gyr_si': df_sensor['rawGirZ'].astype(float).values
-                }).reset_index(drop=True)
-
-            acc_pa = (s1.loc[common, 'rawAccX'].astype(float).values +
-                      s2.loc[common, 'rawAccX'].astype(float).values)
-            acc_ml = (s1.loc[common, 'rawAccY'].astype(float).values +
-                      s2.loc[common, 'rawAccY'].astype(float).values)
-            acc_si = (s1.loc[common, 'rawAccZ'].astype(float).values +
-                      s2.loc[common, 'rawAccZ'].astype(float).values)
-            gyr_pa = s1.loc[common, 'rawGirX'].astype(float).values
-            gyr_ml = s1.loc[common, 'rawGirY'].astype(float).values
-            gyr_si = s1.loc[common, 'rawGirZ'].astype(float).values
-
-            data = pd.DataFrame({
-                'acc_pa': acc_pa,
-                'acc_ml': acc_ml,
-                'acc_si': acc_si,
-                'gyr_pa': gyr_pa,
-                'gyr_ml': gyr_ml,
-                'gyr_si': gyr_si
-            }).reset_index(drop=True)
-            return data
-
+            else:
+                s1 = df_id1.set_index('sample')
+                s2 = df_id2.set_index('sample')
+                common = sorted(s1.index.intersection(s2.index))
+                if len(common) == 0:
+                    df_sensor = df_id1.copy()
+                else:
+                    df_sensor = df_id1.copy()
+                    df_sensor = df_sensor.set_index('sample').loc[common].reset_index()
+                    df_sensor['rawAccX'] = s1.loc[common, 'rawAccX'].astype(float).values + s2.loc[common, 'rawAccX'].astype(float).values
+                    df_sensor['rawAccY'] = s1.loc[common, 'rawAccY'].astype(float).values + s2.loc[common, 'rawAccY'].astype(float).values
+                    df_sensor['rawAccZ'] = s1.loc[common, 'rawAccZ'].astype(float).values + s2.loc[common, 'rawAccZ'].astype(float).values
+                    df_sensor['rawGirX'] = s1.loc[common, 'rawGirX'].astype(float).values
+                    df_sensor['rawGirY'] = s1.loc[common, 'rawGirY'].astype(float).values
+                    df_sensor['rawGirZ'] = s1.loc[common, 'rawGirZ'].astype(float).values
         else:
-            df_sensor = df[df['canal'] == sensor_name].copy()
-            if df_sensor.empty: return pd.DataFrame()
-            for eje in ['rawGirX', 'rawGirY', 'rawGirZ']:
-                bias = df_sensor[eje].astype(float).iloc[:N_BIAS_SAMPLES].mean()
-                df_sensor[eje] = df_sensor[eje].astype(float) - bias
-            data = pd.DataFrame({
-                'acc_pa': df_sensor['rawAccX'].astype(float),
-                'acc_ml': df_sensor['rawAccY'].astype(float),
-                'acc_si': df_sensor['rawAccZ'].astype(float),
-                'gyr_pa': df_sensor['rawGirX'].astype(float),
-                'gyr_ml': df_sensor['rawGirY'].astype(float),
-                'gyr_si': df_sensor['rawGirZ'].astype(float)
-            }).reset_index(drop=True)
-            return data
+            df_sensor = df[(df['canal'] == sensor_name)].copy()
+
+        if df_sensor.empty: return pd.DataFrame()
+
+        # Compute N_BIAS_SAMPLES dynamically based on gyro magnitude
+        gyr_mag = np.sqrt(df_sensor['rawGirX'].astype(float)**2 + df_sensor['rawGirY'].astype(float)**2 + df_sensor['rawGirZ'].astype(float)**2)
+        active_idx = np.where(gyr_mag > 30.0)[0]
+        if len(active_idx) > 0:
+            n_bias_samples = max(20, active_idx[0])# - 20)
+        else:
+            n_bias_samples = 118
+        print(f'n bias samples: {n_bias_samples}')
+        for eje in ['rawGirX', 'rawGirY', 'rawGirZ']:
+            bias = df_sensor[eje].astype(float).iloc[:n_bias_samples].mean()
+            df_sensor[eje] = df_sensor[eje].astype(float) - bias
+
+        data = pd.DataFrame({
+            'acc_pa': df_sensor['rawAccX'].astype(float),
+            'acc_ml': df_sensor['rawAccY'].astype(float),
+            'acc_si': df_sensor['rawAccZ'].astype(float),
+            'gyr_pa': df_sensor['rawGirX'].astype(float),
+            'gyr_ml': df_sensor['rawGirY'].astype(float),
+            'gyr_si': df_sensor['rawGirZ'].astype(float)
+        }).reset_index(drop=True)
+        return data
 
     def process_trajectory(imu_data, sampling_rate=100.0, tipo_actividad='salto'):
-        stride_list = pd.DataFrame({'start': [0], 'end': [len(imu_data)-1]})
-        stride_list.index.name = 's_id'
+        gyr_mag = np.sqrt(imu_data['gyr_pa'].astype(float)**2 + imu_data['gyr_ml'].astype(float)**2 + imu_data['gyr_si'].astype(float)**2)
+        active_idx = np.where(gyr_mag > 30.0)[0]
+        if len(active_idx) > 0:
+            jump_start = max(0, active_idx[0] - 20)
+            jump_end = min(len(imu_data) - 1, active_idx[-1] + 20)
+        else:
+            jump_start = 0
+            jump_end = len(imu_data) - 1
 
+        stride_list = pd.DataFrame({'start': [jump_start], 'end': [jump_end]})
+        stride_list.index.name = 's_id'
         ed = RamppEventDetection()
-        ed = ed.detect(data=imu_data, stride_list=stride_list,
-                       sampling_rate_hz=sampling_rate)
+        ed = ed.detect(data=imu_data, stride_list=stride_list, sampling_rate_hz=sampling_rate)
         zero_velocity_events = ed.min_vel_event_list_
 
         imu_xyz = imu_data.rename(columns={
@@ -542,14 +541,7 @@ elif actividad_actual in ['salto']:
 
         if hasattr(trajectory, 'zupt_detector') and trajectory.zupt_detector is not None:
             if hasattr(trajectory.zupt_detector, 'window_length_s'):
-                if tipo_actividad in ['marcha', 'correr']:
-                    if tipo_actividad == 'correr':
-                        min_permitido = 2.0 / sampling_rate
-                    else:
-                        min_permitido = 3.01 / sampling_rate
-                    trajectory.zupt_detector.window_length_s = max(0.05, min_permitido)
-                elif sampling_rate < 100.0:
-                    trajectory.zupt_detector.window_length_s = max(0.05, 4.0 / sampling_rate)
+                trajectory.zupt_detector.window_length_s = max(0.05, 18.0 / sampling_rate)
 
         trajectory = trajectory.estimate(
             data=imu_xyz,
@@ -566,7 +558,6 @@ elif actividad_actual in ['salto']:
 
         pos = position_df.values[:, :3]
         pos[:, 2] = np.maximum(pos[:, 2], 0.0)
-
         if 'w' in orientation_df.columns:
             quats = orientation_df[['x','y','z','w']].values
         elif 'q_w' in orientation_df.columns:
@@ -579,7 +570,7 @@ elif actividad_actual in ['salto']:
         return pos, quats
 
     fs_val = 1.0 / samplePeriod
-
+    print('fs_val:', fs_val)
     # Sensor 1 (Mov)
     imu_df_1 = load_imu_data(filePath, canales[0])
     if not imu_df_1.empty:
@@ -714,11 +705,19 @@ else:
                     }).reset_index(drop=True)
                     return data
 
-            def process_trajectory(imu_data, sampling_rate=100.0, tipo_actividad='salto'):
-                stride_list = pd.DataFrame({'start': [0], 'end': [len(imu_data)-1]})
-                stride_list.index.name = 's_id'
+                def process_trajectory(imu_data, sampling_rate=100.0, tipo_actividad='salto'):
+                    gyr_mag = np.sqrt(imu_data['gyr_pa'].astype(float)**2 + imu_data['gyr_ml'].astype(float)**2 + imu_data['gyr_si'].astype(float)**2)
+                    active_idx = np.where(gyr_mag > 30.0)[0]
+                    if len(active_idx) > 0:
+                        jump_start = max(0, active_idx[0] - 20)
+                        jump_end = min(len(imu_data) - 1, active_idx[-1] + 20)
+                    else:
+                        jump_start = 0
+                        jump_end = len(imu_data) - 1
 
-                ed = RamppEventDetection()
+                    stride_list = pd.DataFrame({'start': [jump_start], 'end': [jump_end]})
+                    stride_list.index.name = 's_id'
+                    ed = RamppEventDetection()
                 ed = ed.detect(data=imu_data, stride_list=stride_list,
                             sampling_rate_hz=sampling_rate)
                 zero_velocity_events = ed.min_vel_event_list_
@@ -756,7 +755,7 @@ else:
 
                 pos = position_df.values[:, :3]
                 pos[:, 2] = np.maximum(pos[:, 2], 0.0)
-
+                
                 if 'w' in orientation_df.columns:
                     quats = orientation_df[['x','y','z','w']].values
                 elif 'q_w' in orientation_df.columns:
@@ -772,9 +771,10 @@ else:
 
             # Sensor 1 (Mov)
             imu_df_1 = load_imu_data(filePath, canales[0])
+            
             if not imu_df_1.empty:
                 sensor_frame_1 = imu_df_1.rename(columns={'acc_pa':'acc_x', 'acc_ml':'acc_y', 'acc_si':'acc_z', 'gyr_pa':'gyr_x', 'gyr_ml':'gyr_y', 'gyr_si':'gyr_z'})
-                pca_align_1 = PcaAlignment(target_axis="y", pca_plane_axis=("gyr_x", "gyr_y")).align(sensor_frame_1)
+                pca_align_1 = PcaAlignment(target_axis="y", pca_plane_axis=("gyr_x", "gyr_z")).align(sensor_frame_1)
                 body_frame_1 = pca_align_1.aligned_data_.rename(columns={'acc_x':'acc_pa', 'acc_y':'acc_ml', 'acc_z':'acc_si', 'gyr_x':'gyr_pa', 'gyr_y':'gyr_ml', 'gyr_z':'gyr_si'})
                 pos1_gm, quats1_gm = process_trajectory(body_frame_1, sampling_rate=fs_val, tipo_actividad=actividad_actual)
             else:
@@ -784,7 +784,7 @@ else:
             imu_df_2 = load_imu_data(filePath, canales[1])
             if not imu_df_2.empty:
                 sensor_frame_2 = imu_df_2.rename(columns={'acc_pa':'acc_x', 'acc_ml':'acc_y', 'acc_si':'acc_z', 'gyr_pa':'gyr_x', 'gyr_ml':'gyr_y', 'gyr_si':'gyr_z'})
-                pca_align_2 = PcaAlignment(target_axis="y", pca_plane_axis=("gyr_x", "gyr_y")).align(sensor_frame_2)
+                pca_align_2 = PcaAlignment(target_axis="y", pca_plane_axis=("gyr_y", "gyr_z")).align(sensor_frame_2)
                 body_frame_2 = pca_align_2.aligned_data_.rename(columns={'acc_x':'acc_pa', 'acc_y':'acc_ml', 'acc_z':'acc_si', 'gyr_x':'gyr_pa', 'gyr_y':'gyr_ml', 'gyr_z':'gyr_si'})
                 pos2_gm, quats2_gm = process_trajectory(body_frame_2, sampling_rate=fs_val, tipo_actividad=actividad_actual)
             else:
@@ -926,9 +926,10 @@ if actividad_actual in ['salto']:
     # =========================================================================
     if pos1[-1, 0] - pos1[0, 0] < 0:
         pos1[:, 0] = -pos1[:, 0]
+        
     if pos1[-1, 1] - pos1[0, 1] < 0:
         pos1[:, 1] = -pos1[:, 1]
-
+        
     if pos2[-1, 0] - pos2[0, 0] < 0:
         pos2[:, 0] = -pos2[:, 0]
     if pos2[-1, 1] - pos2[0, 1] < 0:
@@ -993,7 +994,7 @@ if actividad_actual in ['salto']:
 
     # Umbral ajustado a 0.1 para que el salto corto de 40 cm se alinee.
     dist_total = np.linalg.norm(pos1[-1, 0:2] - pos1[0, 0:2])
-
+    print(f'distancia total: {dist_total}')
     if dist_total > 0.1:  
         def calcular_yaw_pca(posiciones):
             pos_xy = posiciones[:, 0:2]
